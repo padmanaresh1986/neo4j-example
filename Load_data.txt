@@ -1,0 +1,62 @@
+Download dataset from 
+
+https://catalog.data.gov/dataset/consumer-complaint-database
+
+
+To load data into Neo4J database
+
+place csv file in below location
+C:\Users\DELL\.Neo4jDesktop\relate-data\dbmss\dbms-c8d8276f-567a-427e-9bb4-c1230984e17c\import
+
+
+then create below Indexes
+CREATE CONSTRAINT FOR (c:Complaint) REQUIRE c.id IS UNIQUE;
+CREATE CONSTRAINT FOR (c:Company) REQUIRE c.name IS UNIQUE;
+CREATE CONSTRAINT FOR (c:Response) REQUIRE c.name IS UNIQUE;
+CREATE CONSTRAINT FOR (P:Product) REQUIRE P.name IS UNIQUE;
+CREATE CONSTRAINT FOR (S:SubProduct) REQUIRE S.name IS UNIQUE;
+CREATE CONSTRAINT FOR (I:Issue) REQUIRE I.name IS UNIQUE;
+CREATE CONSTRAINT FOR (S:SubIssue) REQUIRE S.name IS UNIQUE;
+
+
+Then run below query to load data  
+
+CALL {
+  // Load data from CSV
+  LOAD CSV WITH HEADERS FROM 'file:///complaints.csv' AS line
+  // Splitting the date
+  WITH line, SPLIT(line.`Date received`, '/') AS date
+  LIMIT 500
+  // Create nodes and relationships
+  CREATE (complaint:Complaint {id: toInteger(line.`Complaint ID`), 
+  date_received: line.`Date received`,
+  submitted_via: line.`Submitted via`,
+  state : line.`State`,
+  zip_code : line.`ZIP code`,
+  tags: line.`Tags`,
+  date_sent_to_company: line.`Date sent to company`,
+  customer_narrative: line.`Consumer complaint narrative`
+  })
+
+  MERGE (company:Company {name: line.Company})
+  MERGE (response:Response {name: line.`Company response to consumer`})
+
+  CREATE (complaint)-[:AGAINST]->(company)
+  CREATE (response)-[resp:TO]->(complaint)
+  
+  SET resp.timely = CASE line.`Timely response?` WHEN 'Yes' THEN true ELSE false END,
+      resp.disputed = CASE line.`Consumer disputed?` WHEN 'Yes' THEN true ELSE false END,
+	  resp.consent = CASE line.`Consumer consent provided?` WHEN 'Yes' THEN true ELSE false END
+  
+  WITH complaint, line
+  WHERE line.`Product` IS NOT NULL AND line.`Sub-product` IS NOT NULL AND line.`Issue` IS NOT NULL AND line.`Sub-issue` IS NOT NULL
+  MERGE (product:Product {name: line.`Product`})
+  MERGE (subProduct:SubProduct {name: line.`Sub-product`})
+  MERGE (issue:Issue {name: line.`Issue`})
+  MERGE (subIssue:SubIssue {name: line.`Sub-issue`})
+ 
+  CREATE(subProduct)-[:CATEGORY]->(product)
+  CREATE(subIssue)-[:CATEGORY]->(issue)
+  CREATE(complaint)-[:ABOUT]->(product)
+  CREATE(complaint)-[:WITH]->(issue)
+}
