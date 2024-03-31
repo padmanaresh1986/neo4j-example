@@ -60,3 +60,28 @@ CALL {
   CREATE(complaint)-[:ABOUT]->(product)
   CREATE(complaint)-[:WITH]->(issue)
 }
+
+
+
+Example select query
+
+MATCH (complaint:Complaint)-[:AGAINST]->(company:Company {name: 'EQUIFAX, INC.'})
+OPTIONAL MATCH (complaint)-[:ABOUT]->(product:Product)
+OPTIONAL MATCH (complaint)-[:WITH]->(issue:Issue)
+OPTIONAL MATCH (complaint)-[:CATEGORY]->(subProduct:SubProduct)
+OPTIONAL MATCH (complaint)-[:CATEGORY]->(subIssue:SubIssue)
+OPTIONAL MATCH (complaint)<-[:TO]-(response:Response)
+RETURN complaint, company, product, subProduct, issue, subIssue, response;
+
+
+Select query with Like condition
+
+MATCH (complaint:Complaint)-[:AGAINST]->(company:Company)
+WHERE company.name =~ '.*BANK.*'
+OPTIONAL MATCH (complaint)-[:ABOUT]->(product:Product)
+OPTIONAL MATCH (complaint)-[:WITH]->(issue:Issue)
+OPTIONAL MATCH (complaint)-[:CATEGORY]->(subProduct:SubProduct)
+OPTIONAL MATCH (complaint)-[:CATEGORY]->(subIssue:SubIssue)
+OPTIONAL MATCH (complaint)<-[:TO]-(response:Response)
+RETURN complaint, company, product, subProduct, issue, subIssue, response;
+
