@@ -1,0 +1,59 @@
+{
+    "file_name": "complaints_100.csv",
+    "constraints": {
+        "Complaint": "ComplaintId",
+        "Company": "Company",
+        "Product": "Product",
+        "SubProduct" : "SubProduct",
+        "Issue": "Issue",
+        "SubIssue": "SubIssue",
+        "Response": "ComplaintId"
+    },
+    "nodes": {
+        "Complaint": [
+            "ComplaintId",
+            "DateReceived",
+            "SubmittedVia",
+            "DateSentToCompany",
+            "Tags",
+            "ConsumerComplaintNarrative",
+            "State",
+            "ZipCode"
+        ],
+        "Company": [
+            "Company"            
+        ],
+        "Product": [
+            "Product"
+        ],
+        "SubProduct": [
+            "SubProduct"
+        ],
+        "Issue": [
+            "Issue"
+        ],
+        "SubIssue": [
+            "SubIssue"
+        ],
+        "Response": [
+            "ComplaintId",
+            "TimelyResponse",
+            "ConsumerDisputed",
+            "CompanyResponseToConsumer",
+            "ConsumerConsentProvided",
+            "CompanyPublicResponse"
+        ]
+    },
+    "edges": [
+        {
+            "source": "Complaint",
+            "destination": "Company",
+            "label": "AGAINST"
+        },
+        {
+            "source": "Response",
+            "destination": "Complaint",
+            "label": "TO"
+        }
+    ]
+}
