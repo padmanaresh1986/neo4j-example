@@ -27,7 +27,7 @@ class Neo4jService:
 
     @staticmethod
     def create_constraint_cypher(label, node_property):
-        return f"CREATE CONSTRAINT FOR (c:{label}) REQUIRE c.{node_property} IS UNIQUE"
+        return f"CREATE CONSTRAINT IF NOT EXISTS FOR (c:{label}) REQUIRE c.{node_property} IS UNIQUE"
 
     @staticmethod
     def remove_special_and_numeric(string):

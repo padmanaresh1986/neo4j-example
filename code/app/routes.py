@@ -30,7 +30,7 @@ def handle_create_nodes():
 
     if not constraints or not isinstance(constraints, dict):
         return jsonify({"error": "List of constraints is required"}), 400
-    #neo4j_service.create_constraints(constraints)
+    neo4j_service.create_constraints(constraints)
 
     if not node_data or not isinstance(node_data, dict):
         return jsonify({"error": "List of nodes is required"}), 400

@@ -4,7 +4,7 @@
         "Complaint": "ComplaintId",
         "Company": "Company",
         "Product": "Product",
-        "SubProduct" : "SubProduct",
+        "SubProduct": "SubProduct",
         "Issue": "Issue",
         "SubIssue": "SubIssue",
         "Response": "ComplaintId"
@@ -21,7 +21,7 @@
             "ZipCode"
         ],
         "Company": [
-            "Company"            
+            "Company"
         ],
         "Product": [
             "Product"
@@ -46,13 +46,25 @@
     },
     "edges": [
         {
-            "source": "Complaint",
-            "destination": "Company",
+            "source": {
+                "node": "Complaint",
+                "key": "ComplaintId"
+            },
+            "destination": {
+                "node": "Company",
+                "key": "Company"
+            },
             "label": "AGAINST"
         },
         {
-            "source": "Response",
-            "destination": "Complaint",
+            "source": {
+                "node": "Response",
+                "key": "ComplaintId"
+            },
+            "destination": {
+                "node": "Complaint",
+                "key": "ComplaintId"
+            },
             "label": "TO"
         }
     ]
