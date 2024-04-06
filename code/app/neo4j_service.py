@@ -68,5 +68,5 @@ class Neo4jService:
     def create_edge_cypher(edge):
         source = edge["source"]
         dest = edge["destination"]
-        return f'MATCH (b:{dest["node"]}), (a:{source["node"]}) WHERE a.{source["key"]} = ${source["key"]} AND b.{dest["key"]} = ${dest["key"]} CREATE (b)-[:{edge["label"]}]->(a)'
+        return f'MATCH (b:{dest["node"]}), (a:{source["node"]}) WHERE a.{source["key"]} = ${source["key"]} AND b.{dest["key"]} = ${dest["key"]} OPTIONAL MATCH (b)-[r:{edge["label"]}]->(a) WHERE r IS NULL CREATE (b)-[:{edge["label"]}]->(a)'
 
