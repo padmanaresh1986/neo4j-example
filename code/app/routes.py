@@ -45,4 +45,4 @@ def handle_create_nodes():
         os.remove(file_name)
         print("File deleted successfully.")
 
-    return jsonify({"message": "Nodes created successfully"})
+    return jsonify({"message": "Data Loaded successfully"})

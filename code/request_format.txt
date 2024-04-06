@@ -69,3 +69,83 @@
         }
     ]
 }
+
+
+
+
+
+{
+    "file_name": "banklist.csv",
+    "constraints": {
+        "Bank": "BankName ",
+        "City": "City",
+        "State": "State",
+        "AcquiringInstitution": "AcquiringInstitution"
+    },
+    "nodes": {
+        "Bank": [
+            "BankName"
+        ],
+        "City": [
+            "City"
+        ],
+        "State": [
+            "State"
+        ],
+        "AcquiringInstitution": [
+            "AcquiringInstitution"
+        ],
+        "BankData": [
+            "BankName",
+            "Cert",
+            "ClosingDate",
+            "Fund"
+        ]
+    },
+    "edges": [
+        {
+            "source": {
+                "node": "Bank",
+                "key": "BankName"
+            },
+            "destination": {
+                "node": "AcquiringInstitution",
+                "key": "AcquiringInstitution"
+            },
+            "label": "AcquiredBy"
+        },
+        {
+            "source": {
+                "node": "Bank",
+                "key": "BankName"
+            },
+            "destination": {
+                "node": "City",
+                "key": "City"
+            },
+            "label": "LocatedIn"
+        },
+        {
+            "source": {
+                "node": "City",
+                "key": "City"
+            },
+            "destination": {
+                "node": "State",
+                "key": "State"
+            },
+            "label": "BelongsTo"
+        },
+        {
+            "source": {
+                "node": "Bank",
+                "key": "BankName"
+            },
+            "destination": {
+                "node": "BankData",
+                "key": "BankName"
+            },
+            "label": "HasData"
+        }
+    ]
+}
