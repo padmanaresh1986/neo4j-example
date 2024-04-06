@@ -44,23 +44,29 @@ class Neo4jService:
         return self.remove_special_and_numeric(' '.join(word.capitalize() for word in k.replace("-", " ").split()))
 
     def create_nodes(self, node_data, file_name):
-        csv_file = "resources/"+file_name
         with self.driver.session() as session:
             for node, properties in node_data.items():
                 cypher_query = self.create_node_cypher(node, properties)
-                print(cypher_query)
-                self.create_nodes_from_csv(cypher_query, csv_file, session)
-        print("Data loaded successfully.")
-        if os.path.exists(csv_file):
-            os.remove(csv_file)
-            print("File deleted successfully.")
-        print("Done")
+                self.create_nodes_from_csv(cypher_query, file_name, session)
+        print("Nodes created successfully.")
 
     def create_constraints(self, constraints):
         with self.driver.session() as session:
             for label, node_property in constraints.items():
                 cypher_query = self.create_constraint_cypher(label, node_property)
-                print(cypher_query)
                 session.run(cypher_query)
         print("Constraints created successfully.")
+
+    def create_edges(self, edges_data, file_name):
+        with self.driver.session() as session:
+            for edge in edges_data:
+                cypher_query = self.create_edge_cypher(edge)
+                self.create_nodes_from_csv(cypher_query, file_name, session)
+        print("Edges created successfully.")
+
+    @staticmethod
+    def create_edge_cypher(edge):
+        source = edge["source"]
+        dest = edge["destination"]
+        return f'MATCH (b:{dest["node"]}), (a:{source["node"]}) WHERE a.{source["key"]} = ${source["key"]} AND b.{dest["key"]} = ${dest["key"]} CREATE (b)-[:{edge["label"]}]->(a)'
 

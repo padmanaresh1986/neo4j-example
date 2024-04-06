@@ -60,7 +60,7 @@ def create_node_queries():
 
 
 def main():
-    csv_file = 'resources/complaints_100.csv'
+    csv_file = 'resources/complaints_100'
     driver = GraphDatabase.driver(uri, auth=(username, password))
     with driver.session() as session:
         node_data = create_node_queries()

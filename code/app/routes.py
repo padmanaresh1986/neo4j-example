@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.neo4j_service import Neo4jService
+import os
 
 bp = Blueprint('routes', __name__)
 neo4j_service = Neo4jService()
@@ -24,7 +25,7 @@ def upload_csv():
 @bp.route('/create_nodes', methods=['POST'])
 def handle_create_nodes():
     node_data = request.json.get("nodes")
-    file_name = request.json.get("file_name")
+    file_name = "resources/" + request.json.get("file_name")
     constraints = request.json.get("constraints")
     edges = request.json.get("edges")
 
@@ -34,5 +35,14 @@ def handle_create_nodes():
 
     if not node_data or not isinstance(node_data, dict):
         return jsonify({"error": "List of nodes is required"}), 400
-    neo4j_service.create_nodes(node_data,file_name)
+    neo4j_service.create_nodes(node_data, file_name)
+
+    if not edges or not isinstance(edges, list):
+        return jsonify({"error": "List of edges is required"}), 400
+    neo4j_service.create_edges(edges, file_name)
+
+    if os.path.exists(file_name):
+        os.remove(file_name)
+        print("File deleted successfully.")
+
     return jsonify({"message": "Nodes created successfully"})
