@@ -8,10 +8,31 @@ document.getElementById('search-button').addEventListener('click', () => {
           serverPassword: "DurgaSahasra#2018",
       },
       labels: {
+        Company :{
+          label:"",
+          size: 100
+        },
+        Complaint:{
+          label:"ComplaintId"
+        }
           
       },
       relationships: {
-          
+        "AGAINST": {
+          "caption": true,
+          "thickness": "weight",
+          "arrows": {
+            "to": {
+              "enabled": true,
+              "scaleFactor": 1
+            }
+          }
+        }
+      },
+      edges: {
+        arrows: {
+            to: {enabled: true}
+        }
       },
       initialCypher: query
   };
