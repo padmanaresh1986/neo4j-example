@@ -9,30 +9,26 @@ document.getElementById('search-button').addEventListener('click', () => {
       },
       labels: {
         Company :{
-          label:"",
-          size: 100
+          label: "Company",
+          size: 100,
+          community: "Company",
+          color: "#FF0000"  // Red color for Company nodes
         },
         Complaint:{
-          label:"ComplaintId"
+          label: "ComplaintId",
+          community: "Complaint",
+          color: "#00FF00"  // Green color for Complaint nodes
         }
           
       },
       relationships: {
-        "AGAINST": {
-          "caption": true,
-          "thickness": "weight",
-          "arrows": {
-            "to": {
-              "enabled": true,
-              "scaleFactor": 1
+        'AGAINST': {
+                value: "type",
+                label : "AGAINST",
+                arrows: {
+                    to: {enabled: true}
+                }
             }
-          }
-        }
-      },
-      edges: {
-        arrows: {
-            to: {enabled: true}
-        }
       },
       initialCypher: query
   };
